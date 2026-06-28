@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Christian Flores Alvarado — Arquitectura de Procesos</title>
+<meta name="description" content="Portafolio de proyectos de mejora, calidad y arquitectura de procesos. Christian Flores Alvarado — Mgtr. en Dirección de Procesos Estratégicos." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0E2336;          /* deep navy ground */
+    --ink-2:#13314f;        /* raised navy panel */
+    --navy:#1F4E79;         /* brand primary */
+    --blue:#2E75B6;         /* brand medium / interactive */
+    --azure:#4F9FE0;        /* bright accent on dark */
+    --sky:#A9CCE3;          /* light blue */
+    --mist:#D6E6F2;         /* lightest blue */
+    --paper:#F4F7FB;        /* light section bg */
+    --white:#FFFFFF;
+    --text:#16293D;         /* text on light */
+    --muted:#5A6B7C;        /* secondary text on light */
+    --muted-dark:#8FB2CE;   /* secondary text on dark */
+    --line-d:rgba(169,204,227,.16);  /* hairline on dark */
+    --line-l:rgba(15,42,71,.12);     /* hairline on light */
+    --ok:#2E75B6;
+    --warn:#C98A2B;
+    --r:4px;
+    --maxw:1140px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:600;line-height:1.12;margin:0}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  ::selection{background:var(--azure);color:#fff}
+
+  /* ---------- NAV ---------- */
+  .nav{position:sticky;top:0;z-index:40;background:rgba(14,35,54,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line-d)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:12px;color:#fff}
+  .brand .reg{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--azure);
+    border:1px solid var(--line-d);padding:3px 7px;border-radius:3px;letter-spacing:.06em}
+  .brand b{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.01em}
+  .nav-links{display:flex;gap:26px;align-items:center}
+  .nav-links a{font-size:13.5px;color:var(--mist);transition:color .2s}
+  .nav-links a:hover{color:#fff}
+  .nav-cta{font-family:'IBM Plex Mono';font-size:12px;color:var(--ink)!important;background:var(--azure);
+    padding:8px 14px;border-radius:3px;font-weight:500}
+  .nav-cta:hover{background:#fff;color:var(--ink)!important}
+  @media(max-width:680px){.nav-links a:not(.nav-cta){display:none}}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;background:var(--ink);color:#fff;overflow:hidden;
+    border-bottom:1px solid var(--line-d)}
+  .hero .grid-bg{position:absolute;inset:0;
+    background-image:linear-gradient(var(--line-d) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line-d) 1px,transparent 1px);
+    background-size:34px 34px;mask-image:radial-gradient(120% 90% at 70% 0%,#000 35%,transparent 80%);
+    -webkit-mask-image:radial-gradient(120% 90% at 70% 0%,#000 35%,transparent 80%)}
+  .hero .wrap{position:relative;padding:74px 28px 64px}
+  .eyebrow{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--azure);display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--azure)}
+  .hero h1{font-size:clamp(38px,6.2vw,68px);font-weight:700;letter-spacing:-.01em;max-width:14ch}
+  .hero h1 .lt{color:var(--sky);font-weight:400}
+  .hero-sub{margin-top:24px;max-width:60ch;color:var(--mist);font-size:clamp(15px,1.8vw,18px)}
+  .hero-meta{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px}
+  .pill{font-family:'IBM Plex Mono';font-size:12px;color:var(--mist);border:1px solid var(--line-d);
+    padding:6px 12px;border-radius:30px}
+  .pill b{color:#fff;font-weight:500}
+
+  /* ---------- METHOD CYCLE ---------- */
+  .method{background:var(--ink-2);color:#fff;border-bottom:1px solid var(--line-d)}
+  .method .wrap{padding:46px 28px 52px}
+  .method-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:30px}
+  .method-head h2{font-size:22px;color:#fff}
+  .method-head .tag{font-family:'IBM Plex Mono';font-size:12px;color:var(--muted-dark);letter-spacing:.05em}
+  .cycle{display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative}
+  .step{position:relative;padding:18px 14px 14px}
+  .step:not(:last-child)::after{content:"";position:absolute;top:30px;right:-1px;width:1px;height:calc(100% - 30px);
+    background:var(--line-d)}
+  .step .n{font-family:'IBM Plex Mono';font-size:12px;color:var(--azure)}
+  .step .dot{width:11px;height:11px;border-radius:50%;border:2px solid var(--azure);margin:10px 0 12px;
+    position:relative}
+  .step .dot::before{content:"";position:absolute;top:50%;left:100%;width:100%;height:1px;background:var(--line-d);transform:translateY(-50%)}
+  .step:last-child .dot::before{display:none}
+  .step h4{font-size:15px;margin-bottom:5px}
+  .step p{font-size:12.5px;color:var(--muted-dark);line-height:1.45;margin:0}
+  @media(max-width:860px){
+    .cycle{grid-template-columns:repeat(2,1fr);gap:4px 18px}
+    .step:not(:last-child)::after{display:none}
+    .step .dot::before{display:none}
+    .step{border-bottom:1px solid var(--line-d)}
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .projects{padding:64px 0 30px}
+  .sec-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:14px;margin-bottom:8px}
+  .sec-head h2{font-size:clamp(24px,3.4vw,34px);letter-spacing:-.01em}
+  .sec-head .label{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--blue)}
+  .sec-intro{color:var(--muted);max-width:62ch;margin:14px 0 26px;font-size:15px}
+
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px;border-top:1px solid var(--line-l);
+    border-bottom:1px solid var(--line-l);padding:14px 0}
+  .chip{font-family:'IBM Plex Mono';font-size:12.5px;color:var(--muted);background:transparent;
+    border:1px solid var(--line-l);padding:7px 14px;border-radius:30px;cursor:pointer;transition:all .18s}
+  .chip:hover{border-color:var(--blue);color:var(--navy)}
+  .chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+
+  .card{position:relative;background:var(--white);border:1px solid var(--line-l);border-radius:var(--r);
+    padding:26px 26px 22px;cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;
+    display:flex;flex-direction:column;min-height:235px;overflow:hidden}
+  .card::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;
+    background:linear-gradient(90deg,var(--navy),var(--azure));opacity:0;transition:opacity .2s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 14px 34px -18px rgba(15,42,71,.4);border-color:var(--sky)}
+  .card:hover::before{opacity:1}
+  .card:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+  .lamina{font-family:'IBM Plex Mono';font-size:12px;color:var(--blue);letter-spacing:.04em;
+    border:1px solid var(--line-l);padding:3px 8px;border-radius:3px;white-space:nowrap}
+  .indus{font-family:'IBM Plex Mono';font-size:11px;color:var(--muted);text-align:right}
+  .card h3{font-size:19px;line-height:1.16;letter-spacing:-.005em;margin-bottom:10px}
+  .card .ctx{font-size:13.5px;color:var(--muted);margin:0 0 16px;flex:1}
+  .metric-row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+  .metric .big{font-family:'Space Grotesk';font-weight:700;font-size:30px;color:var(--navy);line-height:1;
+    letter-spacing:-.02em}
+  .metric .big.txt{font-size:18px;font-weight:600}
+  .metric .ml{font-family:'IBM Plex Mono';font-size:11px;color:var(--muted);max-width:24ch;margin-top:5px;line-height:1.3}
+  .cats{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+  .cat{font-family:'IBM Plex Mono';font-size:11px;color:var(--navy);background:var(--paper);
+    border:1px solid var(--line-l);padding:3px 9px;border-radius:30px}
+  .card .open{position:absolute;bottom:20px;right:24px;font-family:'IBM Plex Mono';font-size:12px;
+    color:var(--blue);opacity:0;transition:opacity .2s}
+  .card:hover .open{opacity:1}
+  .card.init{background:linear-gradient(180deg,#fbfdff,#f2f7fc)}
+  .card.init .lamina{color:var(--warn);border-color:rgba(201,138,43,.35)}
+
+  .sub-band{margin:46px 0 26px;padding-top:30px;border-top:1px dashed var(--line-l)}
+
+  /* ---------- DETAIL OVERLAY ---------- */
+  .overlay{position:fixed;inset:0;z-index:80;background:rgba(10,24,38,.55);backdrop-filter:blur(3px);
+    opacity:0;visibility:hidden;transition:opacity .25s;overflow-y:auto;padding:0}
+  .overlay.show{opacity:1;visibility:visible}
+  .sheet{max-width:880px;margin:46px auto;background:var(--white);border-radius:6px;overflow:hidden;
+    box-shadow:0 40px 90px -30px rgba(8,20,34,.7);transform:translateY(14px);transition:transform .25s}
+  .overlay.show .sheet{transform:none}
+  @media(max-width:680px){.sheet{margin:0;border-radius:0;min-height:100%}}
+  .sheet-head{position:relative;background:var(--ink);color:#fff;padding:30px 34px 28px;overflow:hidden}
+  .sheet-head .grid-bg{position:absolute;inset:0;background-image:
+      linear-gradient(var(--line-d) 1px,transparent 1px),linear-gradient(90deg,var(--line-d) 1px,transparent 1px);
+    background-size:28px 28px;opacity:.6}
+  .sheet-head .inner{position:relative}
+  .sheet-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;gap:10px}
+  .sheet-bar .left{display:flex;align-items:center;gap:12px;font-family:'IBM Plex Mono';font-size:12px;color:var(--azure)}
+  .btn{font-family:'IBM Plex Mono';font-size:12.5px;cursor:pointer;border:1px solid var(--line-d);
+    background:transparent;color:var(--mist);padding:7px 13px;border-radius:4px;transition:all .18s}
+  .btn:hover{background:var(--azure);color:var(--ink);border-color:var(--azure)}
+  .sheet-actions{display:flex;gap:8px}
+  .sheet-head h3{font-size:clamp(22px,3.5vw,30px);max-width:24ch;letter-spacing:-.01em}
+  .sheet-head .indus2{margin-top:12px;font-family:'IBM Plex Mono';font-size:12.5px;color:var(--muted-dark)}
+  .status{display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono';font-size:12px;
+    margin-top:16px;padding:5px 12px;border-radius:30px;border:1px solid var(--line-d);color:var(--mist)}
+  .status .led{width:8px;height:8px;border-radius:50%;background:var(--azure)}
+  .status.exp .led{background:var(--warn)}
+
+  .sheet-body{padding:32px 34px 40px}
+  @media(max-width:680px){.sheet-head{padding:24px 22px}.sheet-body{padding:24px 22px 34px}}
+  .hero-metrics{display:flex;flex-wrap:wrap;gap:30px;padding:0 0 28px;margin-bottom:28px;
+    border-bottom:1px solid var(--line-l)}
+  .hm .big{font-family:'Space Grotesk';font-weight:700;font-size:38px;color:var(--navy);line-height:1;letter-spacing:-.02em}
+  .hm .big.txt{font-size:22px}
+  .hm .ml{font-family:'IBM Plex Mono';font-size:11.5px;color:var(--muted);margin-top:7px;max-width:30ch;line-height:1.35}
+
+  .field{margin-bottom:24px}
+  .field > .k{font-family:'IBM Plex Mono';font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--blue);margin-bottom:9px;display:flex;align-items:center;gap:10px}
+  .field > .k::after{content:"";flex:1;height:1px;background:var(--line-l)}
+  .field p{margin:0;font-size:15px;color:var(--text)}
+  .field ul{margin:0;padding:0;list-style:none}
+  .field li{position:relative;padding-left:22px;margin-bottom:9px;font-size:14.5px;color:var(--text)}
+  .field li::before{content:"";position:absolute;left:2px;top:9px;width:7px;height:7px;border:1.5px solid var(--blue);
+    border-radius:2px;transform:rotate(45deg)}
+  .tools{display:flex;flex-wrap:wrap;gap:8px}
+  .tool{font-family:'IBM Plex Mono';font-size:12px;color:var(--navy);background:var(--paper);
+    border:1px solid var(--line-l);padding:5px 11px;border-radius:4px}
+  .role-box{background:var(--paper);border-left:3px solid var(--blue);padding:14px 18px;border-radius:0 4px 4px 0;
+    font-size:14.5px;color:var(--text)}
+
+  /* milestones */
+  .hito{border:1px solid var(--line-l);border-radius:5px;margin-bottom:16px;overflow:hidden}
+  .hito-h{background:var(--paper);padding:14px 18px;display:flex;align-items:center;gap:12px;
+    border-bottom:1px solid var(--line-l)}
+  .hito-h .hn{font-family:'IBM Plex Mono';font-size:12px;color:#fff;background:var(--navy);
+    width:26px;height:26px;border-radius:4px;display:grid;place-items:center;flex-shrink:0}
+  .hito-h h4{font-size:16px;letter-spacing:-.005em}
+  .hito-b{padding:18px 18px 6px}
+
+  /* ---------- CONTACT ---------- */
+  .contact{background:var(--ink);color:#fff;margin-top:50px;position:relative;overflow:hidden}
+  .contact .grid-bg{position:absolute;inset:0;background-image:
+      linear-gradient(var(--line-d) 1px,transparent 1px),linear-gradient(90deg,var(--line-d) 1px,transparent 1px);
+    background-size:34px 34px;opacity:.5;
+    mask-image:radial-gradient(100% 80% at 20% 100%,#000 30%,transparent 75%);
+    -webkit-mask-image:radial-gradient(100% 80% at 20% 100%,#000 30%,transparent 75%)}
+  .contact .wrap{position:relative;padding:64px 28px 56px}
+  .contact h2{font-size:clamp(26px,4vw,40px);max-width:18ch;letter-spacing:-.01em}
+  .contact p{color:var(--mist);max-width:54ch;margin:16px 0 30px}
+  .clinks{display:flex;flex-wrap:wrap;gap:12px}
+  .clink{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line-d);padding:12px 18px;
+    border-radius:5px;font-family:'IBM Plex Mono';font-size:13.5px;color:#fff;transition:all .18s}
+  .clink:hover{background:var(--azure);color:var(--ink);border-color:var(--azure)}
+  .clink .ic{color:var(--azure)}
+  .clink:hover .ic{color:var(--ink)}
+  footer{background:var(--ink);color:var(--muted-dark);border-top:1px solid var(--line-d)}
+  footer .wrap{padding:22px 28px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    font-family:'IBM Plex Mono';font-size:12px}
+
+  .toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);background:var(--navy);color:#fff;
+    font-family:'IBM Plex Mono';font-size:13px;padding:11px 20px;border-radius:6px;opacity:0;pointer-events:none;
+    transition:all .25s;z-index:100;box-shadow:0 14px 30px -12px rgba(8,20,34,.6)}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <span class="reg">CF·AP</span>
+      <b>Christian Flores Alvarado</b>
+    </a>
+    <div class="nav-links">
+      <a href="#metodo">Método</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#contacto" class="nav-cta">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="grid-bg"></div>
+  <div class="wrap">
+    <div class="eyebrow">Arquitectura de Procesos · Portafolio</div>
+    <h1>Convierto operaciones en <span class="lt">sistemas medibles y gobernables.</span></h1>
+    <p class="hero-sub">Especialista en transformación de procesos, aseguramiento de calidad y análisis de datos.
+      Diseño la arquitectura completa —del mapeo del proceso al control estadístico— y la implemento sobre
+      operaciones reales. Trayectoria transversal en floricultura, manufactura cerámica y servicios financieros:
+      el método es el mismo en cualquier industria.</p>
+    <div class="hero-meta">
+      <span class="pill"><b>Mgtr.</b> Dirección de Procesos Estratégicos</span>
+      <span class="pill"><b>Auditor Líder</b> ISO 9001</span>
+      <span class="pill"><b>Ing.</b> Química</span>
+      <span class="pill">Cuenca · Ecuador</span>
+    </div>
+  </div>
+</header>
+
+<!-- METHOD -->
+<section class="method" id="metodo">
+  <div class="wrap">
+    <div class="method-head">
+      <h2>El ciclo de Arquitectura de Procesos</h2>
+      <span class="tag">// método aplicado en cada proyecto</span>
+    </div>
+    <div class="cycle">
+      <div class="step"><span class="n">01</span><div class="dot"></div><h4>Mapeo</h4><p>Levantamiento y arquitectura del proceso end-to-end.</p></div>
+      <div class="step"><span class="n">02</span><div class="dot"></div><h4>Captura</h4><p>Instrumentación y registro digital de variables.</p></div>
+      <div class="step"><span class="n">03</span><div class="dot"></div><h4>Análisis</h4><p>Estadística y modelos para hallar causa raíz.</p></div>
+      <div class="step"><span class="n">04</span><div class="dot"></div><h4>Automatización</h4><p>Flujos y sistemas que eliminan trabajo manual.</p></div>
+      <div class="step"><span class="n">05</span><div class="dot"></div><h4>Mejora</h4><p>Control, no conformidades y acciones que aportan valor.</p></div>
+      <div class="step"><span class="n">06</span><div class="dot"></div><h4>Alineación</h4><p>Cada control anclado al plan estratégico.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<main class="projects" id="proyectos">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="label">// catálogo de proyectos</div>
+        <h2>Proyectos de mejora</h2>
+      </div>
+    </div>
+    <p class="sec-intro">Cada ficha resume un proyecto real: el contexto que encontré, mi rol, qué se hizo y el
+      resultado. Toca una ficha para ver el detalle completo. Las cifras provienen de datos reales de la operación.</p>
+
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid"></div>
+
+    <div class="sub-band" id="iniciativas">
+      <div class="sec-head">
+        <div>
+          <div class="label">// iniciativas y desarrollo</div>
+          <h2 style="font-size:26px">Iniciativas en desarrollo</h2>
+        </div>
+      </div>
+      <p class="sec-intro">Diseños y prototipos funcionales completos. Se presentan aparte de los proyectos con
+        resultado cerrado: muestran amplitud de pensamiento y trabajo de arquitectura entregado.</p>
+      <div class="grid" id="grid-init"></div>
+    </div>
+  </div>
+</main>
+
+<!-- CONTACT -->
+<section class="contact" id="contacto">
+  <div class="grid-bg"></div>
+  <div class="wrap">
+    <div class="label" style="font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--azure);margin-bottom:18px">// contacto</div>
+    <h2>¿Tu operación creció más rápido que sus sistemas?</h2>
+    <p>Eso es exactamente lo que diseño: estructura, medición y control para operaciones complejas.
+      Conversemos sobre cómo aplicarlo en la tuya.</p>
+    <div class="clinks">
+      <a class="clink" href="mailto:christiang.floresa@gmail.com"><span class="ic">✉</span> christiang.floresa@gmail.com</a>
+      <a class="clink" href="https://www.linkedin.com/in/christianfloresalvarado" target="_blank" rel="noopener"><span class="ic">in</span> LinkedIn</a>
+      <a class="clink" href="tel:+593982290931"><span class="ic">☎</span> +593 98 229 0931</a>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    <span>© 2026 Christian Flores Alvarado</span>
+    <span>Arquitectura de Procesos · Calidad · Datos</span>
+  </div>
+</footer>
+
+<!-- DETAIL OVERLAY -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-label="Detalle de proyecto">
+  <div class="sheet" id="sheet"></div>
+</div>
+<div class="toast" id="toast">Enlace copiado</div>
+
+<script>
+/* =====================================================================
+   DATOS DE PROYECTOS
+   Para AGREGAR un proyecto: copia un bloque { ... } y edítalo.
+   "seccion": "A" = proyecto con resultado validado · "B" = iniciativa.
+   ===================================================================== */
+const PROJECTS = [
+  {
+    id:"p1", lamina:"P-01", seccion:"A",
+    titulo:"Sistema de Gestión por Procesos y Aseguramiento de Calidad",
+    industria:"Floricultura · Exportación",
+    cats:["Procesos","Calidad","Automatización"],
+    ctx:"Implementación desde cero del sistema de procesos, aseguramiento de calidad y automatización de reclamos en una operación productiva activa.",
+    metrics:[
+      {big:"−78%", txt:false, ml:"reclamos de calidad · 0,62% → 0,14% de las ventas"},
+      {big:"40→93%", txt:true, ml:"vida útil del producto, como % del estándar de calidad"}
+    ],
+    estado:"En desarrollo · variables críticas bajo control", exp:false,
+    resumen:"Un solo sistema construido en tres frentes: la arquitectura de procesos que da estructura, el aseguramiento de calidad que controla las variables críticas, y la automatización del lazo de reclamos que cierra la retroalimentación.",
+    hitos:[
+      {
+        n:"1", titulo:"Arquitectura de procesos",
+        rol:"Diseño de la arquitectura de procesos, dirección técnica del equipo de levantamiento y validación de coherencia estructural con los líderes de cada proceso.",
+        contexto:"Existía documentación previa —mapa, procedimientos y caracterizaciones— pero sin coherencia estructural entre sí ni adopción real. El conocimiento vivía en una sola persona y los documentos no se usaban operativamente.",
+        intervencion:[
+          "Diagnóstico de la documentación existente e identificación de brechas estructurales",
+          "Rediseño del mapa de procesos y levantamiento completo de procesos de nivel 1",
+          "Levantamiento en todos los niveles de Planificación de Producción, Postcosecha y Propagación",
+          "Metodología mixta: revisión documental, entrevistas y observación directa",
+          "Modelado en ADONIS (diagramas) y documentación en Word (fichas, SIPOC, procedimientos)",
+          "Validación de cada proceso con su dueño de proceso"
+        ],
+        tools:["ADONIS","Word","SIPOC"],
+        resultados:[
+          "Mapa de procesos rediseñado y formalizado",
+          "54 procesos de nivel 1 documentados en toda la organización",
+          "120 procesos de niveles 2 y 3 documentados en las áreas de mayor complejidad operativa",
+          "Sistema activo: base para digitalización de módulos, controles de calidad e indicadores por proceso"
+        ]
+      },
+      {
+        n:"2", titulo:"Aseguramiento de calidad (QMS) desde cero",
+        rol:"Diseño e implementación del sistema de aseguramiento: metodología, especificaciones técnicas por variable, planes de muestreo, no conformidades y modelo de liberación por criterio objetivo.",
+        contexto:"Reclamos crecientes y deterioro de la vida útil del producto. Había puntos de control en la cadena, pero sin metodología unificada, con registros parcialmente digitales. Calidad cumplía un rol de reporte, no de control.",
+        intervencion:[
+          "Metodología de ensayos de vida en florero con muestra representativa y trazabilidad hacia los puntos de control",
+          "Sistema de no conformidades (Excel estructurado) para detección de desviaciones en producción general",
+          "Plan de calidad por proceso: definición participativa con dueños de proceso de las variables a controlar",
+          "Fichas técnicas y estándares visuales (conforme / no conforme) con límites por variable crítica",
+          "Tres modalidades de control según el proceso: monitoreo con alerta por sensor, auditoría diferida con acción correctiva, y liberación activa por criterio de calidad",
+          "Análisis estadístico de variables acumuladas con soporte de herramientas de IA"
+        ],
+        tools:["Excel estructurado","Power BI","Análisis asistido por IA (Claude + VS Code)","Sensores de monitoreo"],
+        resultados:[
+          "Reducción del 78% en la tasa de reclamos de calidad (de 0,62% a 0,14% de las ventas)",
+          "Recuperación de la vida útil del producto del 40% al 93% del estándar de calidad",
+          "Calidad reposicionada como función de control y liberación, no de reporte"
+        ]
+      },
+      {
+        n:"3", titulo:"Automatización de la gestión de reclamos",
+        rol:"Conceptualización del sistema, definición del flujo de clasificación y aprobación, y dirección técnica del desarrollo sobre Power Apps, con validación de los líderes de proceso.",
+        contexto:"Los reclamos llegaban por canales dispersos (WhatsApp, correo, llamada) al vendedor, sin registro centralizado. Dos bases separadas —créditos y novedades— sin criterio claro, lo que confundía reclamos comerciales con los de calidad y se perdía la trazabilidad.",
+        intervencion:[
+          "Diseño del flujo de clasificación crédito (con devolución) vs. novedad (feedback), con conversión entre categorías",
+          "Dirección del desarrollo de una aplicación en Power Apps para registro en el punto de origen",
+          "Consolidación de créditos y novedades en un sistema único de análisis",
+          "Notificaciones automáticas por correo a los involucrados según tipo de reclamo y nivel de aprobación",
+          "Validación con líderes de proceso"
+        ],
+        tools:["Power Apps","Power Automate","Dirección técnica asistida por IA"],
+        resultados:[
+          "Canal único de registro, eliminando la dispersión por WhatsApp, correo y llamada",
+          "Trazabilidad completa del reclamo desde el origen hasta la resolución y aprobación",
+          "Separación formal entre reclamos de calidad y créditos comerciales, habilitando análisis limpio",
+          "Sistema en producción, usado por los equipos comercial y de calidad"
+        ]
+      }
+    ]
+  },
+  {
+    id:"p2", lamina:"P-02", seccion:"A",
+    titulo:"Dirección del desarrollo de un modelo predictivo de vida útil",
+    industria:"Floricultura · Exportación",
+    cats:["IA","Datos","Calidad"],
+    ctx:"Dirección científica de un modelo de machine learning para predecir la vida útil del producto e identificar las variables de mayor peso causal entre más de 100 factores.",
+    metrics:[
+      {big:"100+", txt:false, ml:"variables modeladas (categóricas, de incidencia y de lag)"},
+      {big:"Random Forest", txt:true, ml:"algoritmo en refinamiento · revisión semanal"}
+    ],
+    estado:"Experimental · en refinamiento, sin umbral de producción definido aún", exp:true,
+    rol:"Dirección científica: definición del problema, selección y depuración del conjunto de variables, interpretación de resultados y validación contra datos reales de vida útil.",
+    contexto:"Deterioro de la vida útil con causa raíz no identificada. Los análisis estadísticos convencionales sobre más de 100 variables —categóricas, de incidencia y de lag— no aislaban señales precisas por el ruido multivariable y la interdependencia entre factores de la cadena.",
+    intervencion:[
+      "Definición del problema predictivo: estimar la vida útil esperada e identificar las variables de mayor peso causal",
+      "Selección inicial del conjunto de variables (~100), fuentes de datos y criterios de inclusión/exclusión",
+      "Propuesta conceptual de arquitectura de red neuronal con error cuadrático medio; el equipo técnico propuso y ejecutó Random Forest como algoritmo de mayor rendimiento para el dataset",
+      "Revisión semanal: interpretación de importancia de variables, validación contra vida útil real y ajuste del dataset",
+      "Uso de los resultados intermedios para identificar variables críticas a controlar en el sistema de calidad — impacto operativo antes de que el modelo esté en producción"
+    ],
+    tools:["Random Forest","Python (ejecutado por analista, dirigido e interpretado por el rol)","Análisis asistido por IA"],
+    resultados:[
+      "Identificación de variables críticas de mayor peso predictivo, incorporadas al sistema de control de calidad activo",
+      "Error actual ~2,5 días sobre vida útil real — modelo en fase de ajuste de dataset y refinamiento de variables",
+      "Marco de trabajo de revisión semanal establecido para iterar el modelo"
+    ]
+  },
+  {
+    id:"p3", lamina:"P-03", seccion:"A",
+    titulo:"Automatización de procesos financieros",
+    industria:"Servicios financieros",
+    cats:["Automatización","Procesos","Producto"],
+    ctx:"Tres soluciones en producción —cartolas electrónicas, devolución de cheques y tarjetas prepago— originadas en diagnóstico de proceso y especificación funcional detallada para TI.",
+    metrics:[
+      {big:"−11%", txt:false, ml:"tiempo de atención por transacción en ventanilla"},
+      {big:"3", txt:false, ml:"soluciones en producción, validadas con líderes de proceso"}
+    ],
+    estado:"En producción", exp:false,
+    resumen:"Cada intervención partió de un diagnóstico de proceso y derivó en un documento de especificación funcional detallada —flujos de pantalla, comportamiento por acción, validaciones, alertas y destino de los datos— validado en cada etapa con los líderes de proceso.",
+    hitos:[
+      {
+        n:"1", titulo:"Cartolas electrónicas (estados de cuenta digitales)",
+        rol:"Identificación de la oportunidad mediante toma de tiempos, propuesta de mejora, especificación funcional detallada y validación transversal con Jurídico, Archivo y áreas de riesgo.",
+        contexto:"La emisión de la cartola física consumía tiempo productivo de ventanilla y obligaba a gestión documental en papel.",
+        intervencion:[
+          "Toma de tiempos: el 11% del tiempo de atención por transacción correspondía a la impresión de la cartola física",
+          "Propuesta de mejora con análisis de beneficios y riesgos de la cartola electrónica",
+          "Especificación funcional detallada del flujo de creación y actualización de cuentas",
+          "Validación con Jurídico (contratos y adendum), Archivo y áreas de riesgo, junto a líderes de proceso",
+          "Participación en la certificación previa al pase a producción"
+        ],
+        tools:["Toma de tiempos","BPMN","Especificación funcional detallada","Desarrollo interno TI"],
+        resultados:[
+          "Eliminación de la cartola física en ventanilla",
+          "Reducción del 11% del tiempo de atención por transacción (dato base de la propuesta)",
+          "Producto desarrollado internamente y certificado para producción"
+        ]
+      },
+      {
+        n:"2", titulo:"Automatización del proceso de devolución de cheques",
+        rol:"Diagnóstico del proceso, propuesta de mejora, especificación funcional detallada para TI y certificación previa a producción, con líderes de proceso.",
+        contexto:"Los cheques devueltos se registraban en Excel y se gestionaban por llamada sin trazabilidad: se perdía la ubicación del cheque entre agencias y se afectaban los cuadres de caja.",
+        intervencion:[
+          "Diagnóstico del proceso manual y de su impacto en cuadres de caja",
+          "Diseño del módulo de registro integrado a la plataforma de cobro, con captura de cheques devueltos",
+          "Especificación del flujo de notificaciones automáticas al socio y al supervisor, con escala temporal de seguimiento",
+          "Trazabilidad completa: agencia actual, historial de movimientos y estado de resolución",
+          "Validación y certificación con líderes de proceso"
+        ],
+        tools:["BPMN","Especificación funcional detallada","Desarrollo interno TI"],
+        resultados:[
+          "Trazabilidad completa del cheque desde el origen hasta la resolución, eliminando el registro manual en Excel",
+          "Notificación automática al socio y flujo estructurado de seguimiento por agencia",
+          "Reducción estimada del 5% de la jornada diaria del supervisor de cajas (estimación base de viabilidad)"
+        ]
+      },
+      {
+        n:"3", titulo:"Producto: tarjetas prepago (regalo y recargable)",
+        rol:"Modelado del proceso operativo del producto dentro de la arquitectura institucional y especificación funcional detallada para TI, junto a analista y líder de proceso.",
+        contexto:"La institución no contaba con un producto prepago en su portafolio; debía integrarse a los procesos existentes cumpliendo normativa.",
+        intervencion:[
+          "Acompañamiento al líder de proceso en el diseño del producto",
+          "Modelado del flujo operativo completo dentro de los procesos existentes de la institución",
+          "Especificación funcional detallada: gestión del producto, protección de datos, seguridad, cumplimiento comercial y prevención de lavado de activos",
+          "Validación transversal con riesgo, cumplimiento, comercial y líderes de proceso"
+        ],
+        tools:["BPMN","Especificación funcional detallada","Desarrollo interno TI"],
+        resultados:[
+          "Producto lanzado al mercado desde cero: tarjeta prepago en modalidades regalo y recargable",
+          "Proceso operativo integrado a la arquitectura institucional desde el diseño"
+        ]
+      }
+    ]
+  },
+  {
+    id:"p4", lamina:"P-04", seccion:"A",
+    titulo:"Estandarización del control de calidad de engobes y esmaltes por espectrometría",
+    industria:"Manufactura cerámica",
+    cats:["Calidad","Datos"],
+    ctx:"Reemplazo del criterio visual subjetivo por medición instrumental objetiva, desbloqueando un espectrofotómetro que llevaba meses sin uso.",
+    metrics:[
+      {big:"Visual → instrumental", txt:true, ml:"aprobación de lotes por medición objetiva con límites por datos"},
+      {big:"100%", txt:false, ml:"auditores de calidad capacitados en equipo y metodología"}
+    ],
+    estado:"Implementado", exp:false,
+    rol:"Autoaprendizaje del equipo, calibración, diseño de la metodología de medición y construcción de los límites de aceptación desde datos reales. Iniciativa liderada a solicitud de la Jefatura de Calidad.",
+    contexto:"La aprobación de lotes de engobes y esmaltes dependía de inspección visual contra una pieza testigo. La decisión variaba según el observador y las condiciones —incluso entre evaluaciones de la misma persona—, generando reprocesos por lotes no conformes detectados después de cocción y dependencia de un único criterio. Había un espectrofotómetro adquirido pero sin uso por barreras de idioma, calibración y falta de metodología.",
+    intervencion:[
+      "Lectura y comprensión de la documentación técnica del equipo en inglés",
+      "Calibración del equipo — primer uso operativo desde su adquisición",
+      "Diseño de la metodología de muestreo: puntos de medición por placa, protocolo de toma y condiciones de medición para eliminar sesgos",
+      "Medición sistemática de placas previamente aprobadas y rechazadas, construyendo el dataset de referencia contra testigos validados",
+      "Construcción de límites de aceptación y rechazo basados en lecturas reales del equipo",
+      "Documentación de la metodología para operación independiente y capacitación del equipo"
+    ],
+    tools:["Espectrofotómetro","Excel","Metodología de muestreo"],
+    resultados:[
+      "Criterio visual subjetivo reemplazado por medición instrumental objetiva con límites definidos por datos",
+      "Eliminación de la dependencia de un único evaluador para la aprobación de lotes",
+      "Reducción del riesgo de reproceso por variabilidad no detectada entre lotes",
+      "Equipo desbloqueado y operativo tras meses de inactividad",
+      "Personal de calidad capacitado: todos los auditores del área"
+    ]
+  },
+  {
+    id:"p5", lamina:"P-05", seccion:"A",
+    titulo:"Sistema de gestión de postulantes y contratación masiva",
+    industria:"Floricultura · Exportación",
+    cats:["Automatización","Procesos","Datos"],
+    ctx:"Requerimiento funcional completo —de la convocatoria a la selección— para un sistema que da trazabilidad a cientos de postulantes por proceso.",
+    metrics:[
+      {big:"End-to-end", txt:true, ml:"trazabilidad del postulante: convocatoria → selección"},
+      {big:"En producción", txt:true, ml:"implementado sobre la base del requerimiento entregado"}
+    ],
+    estado:"Implementado en producción", exp:false,
+    rol:"Levantamiento del requerimiento funcional completo desde convocatoria hasta selección, con especificación detallada para el proveedor (Afinithy) y validación con líderes de proceso.",
+    contexto:"Cientos de postulantes por proceso, frente a una capacidad de contratación limitada. El registro se hacía en Excel, sin trazabilidad entre fases, sin identificar el canal de origen y sin criterios objetivos de probabilidad de permanencia. Los postulantes que no avanzaban se perdían sin registro aprovechable.",
+    intervencion:[
+      "Diagnóstico del proceso: vacíos en trazabilidad, clasificación y análisis de postulantes",
+      "Requerimiento completo: convocatoria → registro → filtros por perfil → fases de selección → decisión final",
+      "Variables de clasificación: canal de origen, condiciones sociodemográficas e indicadores de probabilidad de permanencia",
+      "Especificación funcional detallada por fase: comportamiento del sistema, validaciones, alertas y registro de datos",
+      "Validación con líderes de proceso y acompañamiento en la fase de pruebas"
+    ],
+    tools:["Afinithy","Especificación funcional detallada","Excel"],
+    resultados:[
+      "Sistema implementado en producción sobre la base del requerimiento entregado",
+      "Trazabilidad completa del postulante desde convocatoria hasta selección",
+      "Eliminación del registro manual en Excel",
+      "Canal de origen y variables de permanencia incorporados al proceso de selección"
+    ]
+  },
+  {
+    id:"p6", lamina:"P-06", seccion:"A",
+    titulo:"Diseño e implementación de metodología BPM institucional",
+    industria:"Servicios financieros",
+    cats:["Procesos","BPM"],
+    ctx:"Iniciativa propia: una metodología BPM y una arquitectura de procesos por niveles que reemplazó la documentación tradicional, hoy adoptada institucionalmente.",
+    metrics:[
+      {big:"4 niveles", txt:false, ml:"arquitectura de procesos: macro (N0) → procesos (N1) → subprocesos e instructivos (N2–N3)"},
+      {big:"En uso", txt:true, ml:"adoptada por el equipo siguiente, con avance hacia BPMS"}
+    ],
+    estado:"Aprobado e implementado · adoptado institucionalmente", exp:false,
+    rol:"Iniciativa propia: diseño completo de la metodología BPM, de la arquitectura de procesos por niveles y del estándar de modelado. Aprobada formalmente por la institución.",
+    contexto:"Había un sistema de gestión de procesos documentado de manera tradicional, sin arquitectura formal ni levantamiento end-to-end. Los procesos se definían según la percepción de cada líder, sin visión de cómo se comunicaban; como resultado, los indicadores no reflejaban la realidad y las mejoras no podían vincularse a valor real.",
+    intervencion:[
+      "Diagnóstico del modelo de gestión existente: vacíos en arquitectura, levantamiento y vinculación entre procesos",
+      "Metodología BPM con ciclo completo: planificación alineada al plan estratégico → levantamiento y análisis end-to-end → mejoras con impacto en valor",
+      "Arquitectura de procesos por niveles: N0 macroprocesos, N1 procesos, N2–N3 subprocesos e instructivos",
+      "Adopción de BPMN como estándar de modelado, reemplazando la diagramación tradicional",
+      "Documentación formal de la metodología y de los procesos del área, aprobada por la institución"
+    ],
+    tools:["BPMN","Bizagi","Metodología BPM"],
+    resultados:[
+      "Metodología BPM institucional aprobada formalmente y documentada",
+      "Arquitectura de procesos por niveles definida como estándar institucional",
+      "Transición de la diagramación tradicional a BPMN",
+      "Metodología en uso, con avance hacia la implementación de un BPMS"
+    ]
+  },
+  /* ---------- SECCIÓN B · INICIATIVAS ---------- */
+  {
+    id:"p7", lamina:"INIC-01", seccion:"B",
+    titulo:"Prototipo de sistema integrado de información para talento humano",
+    industria:"Floricultura · Exportación",
+    cats:["Datos","Procesos"],
+    ctx:"Conceptualización y prototipo funcional que unifica tres fuentes de datos del personal —rendimiento, historial laboral y bienestar— en una sola vista del trabajador.",
+    metrics:[
+      {big:"3 fuentes", txt:false, ml:"rendimiento, historial laboral y bienestar en una vista unificada"},
+      {big:"Prototipo funcional", txt:true, ml:"interfaces operativas e integración completas"}
+    ],
+    estado:"Prototipo funcional completo · entregado para evaluación de implementación", exp:true,
+    rol:"Conceptualización de la arquitectura del sistema, dirección del desarrollo del prototipo funcional y definición de las fuentes de datos a integrar.",
+    contexto:"La gestión del personal operaba con información dispersa en bases sin conexión: rendimiento productivo, historial laboral (ingresos, salidas, promociones, recontrataciones) y seguimiento de bienestar en Excel. No existía una vista unificada del trabajador que permitiera decisiones basadas en su trayectoria completa.",
+    intervencion:[
+      "Conceptualización de la arquitectura: tres fuentes a integrar y la lógica de conexión entre ellas",
+      "Diseño del módulo de seguimiento de bienestar: registro digital de situaciones del trabajador y estado de cierre —fuente nueva, antes en Excel",
+      "Dirección del desarrollo del prototipo: construido por analista con IA como herramienta de programación, bajo dirección técnica del rol",
+      "Prototipo funcional completo: interfaces operativas, integración de fuentes y vista unificada del trabajador"
+    ],
+    tools:["Prototipo funcional","IA como asistente de desarrollo","Integración de bases de datos"],
+    resultados:[
+      "Prototipo funcional completo: vista unificada del trabajador por trayectoria",
+      "Arquitectura de integración definida sobre fuentes existentes más un módulo de bienestar diseñado desde cero",
+      "Entregado como base lista para evaluación de implementación"
+    ]
+  }
+];
+
+/* ===================== RENDER ===================== */
+const FILTER_CATS = ["Todos","Procesos","Calidad","Automatización","Datos","IA","Producto"];
+const grid = document.getElementById('grid');
+const gridInit = document.getElementById('grid-init');
+const filtersEl = document.getElementById('filters');
+let activeFilter = "Todos";
+
+function cardHTML(p){
+  const m = p.metrics.slice(0,2).map(mm=>`
+    <div class="metric">
+      <div class="big ${mm.txt?'txt':''}">${mm.big}</div>
+      <div class="ml">${mm.ml}</div>
+    </div>`).join('');
+  const cats = p.cats.map(c=>`<span class="cat">${c}</span>`).join('');
+  return `<article class="card ${p.seccion==='B'?'init':''}" tabindex="0" role="button"
+      aria-label="Abrir ${p.titulo}" data-id="${p.id}">
+    <div class="card-top">
+      <span class="lamina">${p.lamina}</span>
+      <span class="indus">${p.industria}</span>
+    </div>
+    <h3>${p.titulo}</h3>
+    <p class="ctx">${p.ctx}</p>
+    <div class="metric-row">${m}</div>
+    <div class="cats">${cats}</div>
+    <span class="open">ver ficha →</span>
+  </article>`;
+}
+
+function renderGrid(){
+  const a = PROJECTS.filter(p=>p.seccion==='A' &&
+      (activeFilter==='Todos'||p.cats.includes(activeFilter)));
+  const b = PROJECTS.filter(p=>p.seccion==='B' &&
+      (activeFilter==='Todos'||p.cats.includes(activeFilter)));
+  grid.innerHTML = a.map(cardHTML).join('') ||
+    `<p style="color:var(--muted);font-family:'IBM Plex Mono';font-size:13px">Sin proyectos en esta categoría.</p>`;
+  gridInit.innerHTML = b.map(cardHTML).join('');
+  document.getElementById('iniciativas').style.display = b.length? 'block':'none';
+  bindCards();
+}
+function renderFilters(){
+  filtersEl.innerHTML = FILTER_CATS.map(c=>
+    `<button class="chip ${c===activeFilter?'on':''}" data-c="${c}">${c}</button>`).join('');
+  filtersEl.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{
+    activeFilter=ch.dataset.c; renderFilters(); renderGrid();
+  });
+}
+function bindCards(){
+  document.querySelectorAll('.card').forEach(c=>{
+    c.onclick=()=>openProject(c.dataset.id);
+    c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openProject(c.dataset.id);}};
+  });
+}
+
+/* ----- DETAIL ----- */
+const overlay=document.getElementById('overlay');
+const sheet=document.getElementById('sheet');
+
+function field(k,inner){return `<div class="field"><div class="k">${k}</div>${inner}</div>`;}
+function ul(arr){return `<ul>${arr.map(i=>`<li>${i}</li>`).join('')}</ul>`;}
+function tools(arr){return `<div class="tools">${arr.map(t=>`<span class="tool">${t}</span>`).join('')}</div>`;}
+
+function blockHTML(b){
+  return field("Contexto",`<p>${b.contexto}</p>`)
+    + field("Mi rol",`<div class="role-box">${b.rol}</div>`)
+    + field("Qué se hizo",ul(b.intervencion))
+    + field("Herramientas",tools(b.tools))
+    + field("Resultados",ul(b.resultados));
+}
+function hitoHTML(h){
+  return `<div class="hito">
+    <div class="hito-h"><span class="hn">${h.n}</span><h4>${h.titulo}</h4></div>
+    <div class="hito-b">${blockHTML(h)}</div></div>`;
+}
+
+function openProject(id){
+  const p = PROJECTS.find(x=>x.id===id); if(!p) return;
+  const hm = p.metrics.map(m=>`
+    <div class="hm"><div class="big ${m.txt?'txt':''}">${m.big}</div><div class="ml">${m.ml}</div></div>`).join('');
+  let body = `<div class="hero-metrics">${hm}</div>`;
+  if(p.resumen) body += field("Resumen del proyecto",`<p>${p.resumen}</p>`);
+  if(p.hitos){ body += p.hitos.map(hitoHTML).join(''); }
+  else { body += blockHTML(p); }
+
+  sheet.innerHTML = `
+    <div class="sheet-head"><div class="grid-bg"></div><div class="inner">
+      <div class="sheet-bar">
+        <div class="left">${p.lamina} · ${p.seccion==='B'?'Iniciativa':'Proyecto'}</div>
+        <div class="sheet-actions">
+          <button class="btn" id="copyBtn">Copiar enlace</button>
+          <button class="btn" id="closeBtn">Cerrar ✕</button>
+        </div>
+      </div>
+      <h3>${p.titulo}</h3>
+      <div class="indus2">${p.industria}</div>
+      <span class="status ${p.exp?'exp':''}"><span class="led"></span>${p.estado}</span>
+    </div></div>
+    <div class="sheet-body">${body}</div>`;
+
+  overlay.classList.add('show');
+  document.body.style.overflow='hidden';
+  if(location.hash!=='#'+id) history.replaceState(null,'','#'+id);
+  document.getElementById('closeBtn').onclick=closeProject;
+  document.getElementById('copyBtn').onclick=copyLink;
+  sheet.scrollTop=0; overlay.scrollTop=0;
+}
+function closeProject(){
+  overlay.classList.remove('show');
+  document.body.style.overflow='';
+  history.replaceState(null,'',location.pathname+location.search);
+}
+function copyLink(){
+  const url=location.origin+location.pathname+location.search+location.hash;
+  navigator.clipboard?.writeText(url).then(showToast,()=>showToast());
+}
+const toast=document.getElementById('toast');
+let toastT;
+function showToast(){toast.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toast.classList.remove('show'),1800);}
+
+overlay.addEventListener('click',e=>{if(e.target===overlay)closeProject();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&overlay.classList.contains('show'))closeProject();});
+window.addEventListener('hashchange',()=>{
+  const id=location.hash.replace('#','');
+  if(PROJECTS.find(x=>x.id===id)) openProject(id);
+});
+
+/* init */
+renderFilters(); renderGrid();
+(function(){const id=location.hash.replace('#','');
+  if(PROJECTS.find(x=>x.id===id)) openProject(id);})();
+</script>
+</body>
+</html>
