@@ -224,6 +224,12 @@ function vistaAuditoria(q) {
       </div>
       <p class="small" data-verif aria-live="polite"></p>
     </div>
+    <div class="card" data-export hidden>
+      <p class="small"><strong data-export-tit></strong></p>
+      <label class="sr-only" for="export-txt">Contenido exportado</label>
+      <textarea id="export-txt" rows="8" readonly class="mono"></textarea>
+      <div class="btn-row"><button class="btn sm" type="button" data-action="copiar-export">Copiar</button></div>
+    </div>
     <p class="muted small">${log.length} evento(s). Cada evento registra fecha y hora, reloj del caso, módulo/rol, tarea, dato antes y después, versión de la regla y evidencia.</p>
     <div class="table-wrap"><table class="audit">
       <thead><tr><th scope="col">#</th><th scope="col">Fecha y hora</th><th scope="col">Reloj</th><th scope="col">Caso</th><th scope="col">Módulo / rol</th><th scope="col">Tarea</th><th scope="col">Acción</th><th scope="col">Antes → después</th><th scope="col">Versión de la regla</th><th scope="col">Evidencia</th><th scope="col">Hash</th></tr></thead>
@@ -330,12 +336,23 @@ main.addEventListener('click', (e) => {
       anunciar(`Reloj simulado +1 h en ${n} caso(s) en espera.`);
       return;
     }
-    case 'export-json':
-      descargar(`auditoria_P-03.1_${Date.now()}.json`, aJSON(filtrados(), { politicaVigente: store.versionActual() }), 'application/json');
+    case 'export-json': case 'export-csv': {
+      const json = a === 'export-json';
+      const txt = json ? aJSON(filtrados(), { politicaVigente: store.versionActual() }) : aCSV(filtrados());
+      descargar(`auditoria_P-03.1_${Date.now()}.${json ? 'json' : 'csv'}`, txt, json ? 'application/json' : 'text/csv;charset=utf-8');
+      // Respaldo para visores que bloquean descargas: el contenido queda visible para copiarlo.
+      const out = main.querySelector('[data-export]');
+      out.hidden = false;
+      out.querySelector('[data-export-tit]').textContent = `Exportación ${json ? 'JSON' : 'CSV'} · ${filtrados().length} eventos (si la descarga no empezó, copia el contenido)`;
+      out.querySelector('textarea').value = txt.replace(/^\ufeff/, '');
       return;
-    case 'export-csv':
-      descargar(`auditoria_P-03.1_${Date.now()}.csv`, aCSV(filtrados()), 'text/csv;charset=utf-8');
+    }
+    case 'copiar-export': {
+      const ta = main.querySelector('[data-export] textarea');
+      const ok = () => { btn.textContent = 'Copiado'; anunciar('Contenido copiado.'); };
+      navigator.clipboard?.writeText(ta.value).then(ok).catch(() => { ta.select(); btn.textContent = 'Selecciona y copia (Ctrl+C)'; }) ?? ta.select();
       return;
+    }
     case 'verificar': {
       const roto = audit.verificar();
       main.querySelector('[data-verif]').textContent = roto == null ? `Cadena íntegra: ${store.state.auditLog.length} eventos verificados.` : `Cadena alterada desde el evento #${roto}.`;
@@ -344,7 +361,15 @@ main.addEventListener('click', (e) => {
     case 'borrador-crear': crearBorrador(); return;
     case 'borrador-descartar': descartarBorrador(); return;
     case 'reiniciar':
-      if (confirm('¿Reiniciar el demo? Se borran casos, auditoría y versiones de política.')) { store.reiniciar(); location.hash = '#/inicio'; render(true); }
+      // Confirmación en dos pasos (sin confirm(), que algunos visores bloquean).
+      if (btn.dataset.armado !== 'si') {
+        btn.dataset.armado = 'si';
+        btn.textContent = 'Confirmar: borrar casos, auditoría y versiones';
+        anunciar('Pulsa de nuevo para confirmar el reinicio.');
+        setTimeout(() => { if (document.body.contains(btn)) { btn.dataset.armado = ''; btn.textContent = 'Reiniciar demo (borra casos, auditoría y versiones)'; } }, 6000);
+        return;
+      }
+      store.reiniciar(); location.hash = '#/inicio'; render(true);
       return;
     default:
       if (casoDeRuta()) accionCaso(a, btn, casoDeRuta());

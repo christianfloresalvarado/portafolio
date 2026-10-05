@@ -456,9 +456,14 @@ function cargarBpmn() {
   bp.ready = (async () => {
     if (!window.BpmnJS) throw new Error('No se pudo cargar bpmn-js desde unpkg (sin conexión o bloqueado).');
     bp.viewer = new window.BpmnJS({ container: bp.el });
-    const r = await fetch(PROCESO.bpmnUrl);
-    if (!r.ok) throw new Error(`No se pudo leer el BPMN (${r.status}).`);
-    await bp.viewer.importXML(await r.text());
+    // window.__BPMN_XML permite incrustar el diagrama cuando la página no puede usar fetch.
+    let xml = window.__BPMN_XML;
+    if (!xml) {
+      const r = await fetch(PROCESO.bpmnUrl);
+      if (!r.ok) throw new Error(`No se pudo leer el BPMN (${r.status}).`);
+      xml = await r.text();
+    }
+    await bp.viewer.importXML(xml);
     return bp;
   })();
   return bp.ready;
