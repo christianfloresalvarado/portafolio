@@ -1,0 +1,12 @@
+{
+  "name": "demo-p031-credito-consumo",
+  "private": true,
+  "description": "Demo navegable del proceso TO-BE P-03.1 Concesión de Crédito de Consumo (datos ficticios, integraciones simuladas).",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "e2e": "node tests/e2e.playwright.mjs",
+    "start": "python3 -m http.server 8080"
+  }
+}
